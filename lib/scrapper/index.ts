@@ -21,10 +21,8 @@ export async function scrappedAmazonProduct(url: string) {
   };
 
   try {
-    // const response = await axios.get(url, options);
-    // const html = response.data;
-    // fs.writeFileSync("../../responsedata.html", response.data, "utf-8");
-    const html = fs.readFileSync("../../responsedata.html", "utf-8");
+    const response = await axios.get(url, options);
+    const html = response.data;
 
     const $ = cheerio.load(html);
     const title = $("#productTitle").text().trim();

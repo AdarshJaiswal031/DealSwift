@@ -13,6 +13,7 @@ export async function scrapeAndStoreProduct(productUrl: string) {
   try {
     connectToDB();
     const scrappedProduct = await scrappedAmazonProduct(productUrl);
+    let productId = "";
 
     if (!scrappedProduct) return;
 
@@ -32,7 +33,8 @@ export async function scrapeAndStoreProduct(productUrl: string) {
         highestPrice: getHighestPrice(updatedPriceHistory),
         averagePrice: getAveragePrice(updatedPriceHistory),
       };
-      console.log(product);
+
+      productId = existingProduct._id;
     }
 
     const newProduct = await Product.findOneAndUpdate(
@@ -42,8 +44,9 @@ export async function scrapeAndStoreProduct(productUrl: string) {
       product,
       { upsert: true, new: true }
     );
-
+    productId = newProduct._id;
     revalidatePath(`/products/${newProduct._id}`);
+    return { productId };
   } catch (error: any) {
     throw new Error(`Failed to create/update product: ${error.message}`);
   }

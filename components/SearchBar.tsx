@@ -37,6 +37,7 @@ const SearchBar = () => {
     try {
       setIsLoading(true);
       const product = await scrapeAndStoreProduct(searchPrompt);
+      window.location.href = `/products/${product?.productId}`;
     } catch (err) {
       console.log(err);
     } finally {
