@@ -25,7 +25,7 @@ export const generateEmailBody = async (
       subject = `Welcome to Price Tracking for ${shortenedTitle}`;
       body = `
             <div>
-              <h2>Welcome to PriceWise 🚀</h2>
+              <h2>Welcome to DealSwift 🚀</h2>
               <p>You are now tracking ${product.title}.</p>
               <p>Here's an example of how you'll receive updates:</p>
               <div style="border: 1px solid #ccc; padding: 10px; background-color: #f8f8f8;">
@@ -86,16 +86,23 @@ const transporter = nodemailer.createTransport({
   maxConnections: 1,
 });
 
-export const sendEmail = (emailContent: EmailContent, sendTo: string[]) => {
+export const sendEmail = async (
+  emailContent: EmailContent,
+  sendTo: string[]
+) => {
   const mailOptions = {
     from: process.env.OUTLOOK,
     to: sendTo,
     html: emailContent.body,
     subject: emailContent.subject,
   };
-
-  transporter.sendMail(mailOptions, (error: any, info: any) => {
-    if (error) return error;
-    console.log("Email Sent: ", info);
+  await new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (err: any, info: any) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(info);
+      }
+    });
   });
 };

@@ -14,12 +14,12 @@ type Props = {
 
 const ProductDetails = async ({ params: { id } }: Props) => {
   const product: Product = await getProductById(id);
-  // if (!product) redirect("/");
+  if (!product) redirect("/");
   const similarProducts = await getSimilarProduct(id);
 
   return (
-    <div className="container p-10">
-      <div className="flex gap-28 xl:flex-row flex-col">
+    <div className="container m-auto">
+      <div className="flex gap-28 xl:flex-row flex-col container">
         <div className="product-image">
           <Image
             src={product.image}
@@ -170,7 +170,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
             width={22}
             height={22}
           />
-          <Link className="text-base text-white" href="/">
+          <Link className="text-base text-white" href={product.url} target="/">
             Buy now
           </Link>
         </button>
